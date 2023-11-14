@@ -52,6 +52,10 @@ module ActsAsTaggableOn::Taggable::TaggedWithQuery
         on_condition = on_condition.and(tagging_alias[:context].eq(options[:on]))
       end
 
+      if options[:tenant].present?
+        on_condition = on_condition.and(tagging_alias[:tenant]).eq(options[:tenant].to_s)
+      end
+
       if (owner = options[:owned_by]).present?
         on_condition = on_condition.and(tagging_alias[:tagger_id].eq(owner.id))
                                    .and(tagging_alias[:tagger_type].eq(owner.class.base_class.to_s))
@@ -74,6 +78,10 @@ module ActsAsTaggableOn::Taggable::TaggedWithQuery
 
       if options[:on].present?
         on_condition = on_condition.and(tagging_arel_table[:context].eq(options[:on]))
+      end
+
+      if options[:tenant].present?
+        on_condition = on_condition.and(tagging_arel_table[:tenant]).eq(options[:tenant].to_s)
       end
 
       on_condition
