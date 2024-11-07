@@ -272,6 +272,14 @@ describe 'Taggable' do
     expect(TaggableModel.tagged_with('julia', on: nil).size).to eq(2)
   end
 
+  it 'should be able to find a tag using tenant' do
+    @taggable.skill_list = "ruby"
+    @taggable.tenant_id = '1'
+    @taggable.save
+    expect(TaggableModel.tagged_with("ruby", tenant: 1).count).to eq(1)
+    expect(TaggableModel.tagged_with("ruby", tenant: 2).count).to eq(0)
+  end
+
   it 'should not care about case' do
     TaggableModel.create(name: 'Bob', tag_list: 'ruby')
     TaggableModel.create(name: 'Frank', tag_list: 'Ruby')
